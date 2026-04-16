@@ -581,21 +581,38 @@
     }, duration);
   }
 
-  // ===== Utility: Parse HH:MM → signed minutes =====
+  // ===== Utility: Parse saldo → signed minutes =====
+  // Handles:
+  //   number  → Excel day-fraction (e.g. 0.034 = 49 min, 1.667 = 40h)  [raw:true from SheetJS]
+  //   "HH:MM"           → positive   e.g. "21:24", "00040:00"
+  //   "HH:MM:SS"        → positive, seconds ignored
+  //   "HH:MM-"          → negative   e.g. "00008:40-"
+  //   "HH:MM:SS-"       → negative, seconds ignored
+  //   "-HH:MM"          → negative   e.g. "-08:40"
   function parseMinutes(raw) {
     if (raw === null || raw === undefined) return NaN;
+
+    // ── Numeric: Excel stores durations as fraction-of-a-day ──
+    if (typeof raw === 'number') {
+      if (isNaN(raw)) return NaN;
+      return Math.round(raw * 24 * 60);   // 0.034 × 1440 ≈ 49 min
+    }
+
     let str = String(raw).trim().replace(',', ':');
     if (str === '' || str === '-') return NaN;
 
-    // Handle Excel time serial: a float between 0 and a large number (no colon)
-    // If there's no colon at all try treating as decimal hours
-    if (!/:/u.test(str)) {
+    // ── String without colon: decimal fraction stored as text ──
+    if (!str.includes(':')) {
       const num = parseFloat(str);
-      if (!isNaN(num)) return Math.round(num * 60);
+      if (!isNaN(num)) return Math.round(num * 24 * 60);
       return NaN;
     }
 
-    // Accept sign at start (-HH:MM) or at end (HH:MM-)
+    // ── Strip optional seconds component (HH:MM:SS → HH:MM) ──
+    // Sign can be at start or end; seconds and trailing sign coexist
+    str = str.replace(/^(-?)(\d+:\d{1,2}):\d{1,2}([-]?)$/, '$1$2$3');
+
+    // ── Accept sign at start (-HH:MM) or at end (HH:MM-) ──
     const match = str.match(/^(-?)(\d+):(\d{1,2})([-]?)$/);
     if (!match) return NaN;
     const negative = match[1] === '-' || match[4] === '-';
@@ -672,7 +689,9 @@
       .map(row => {
         const out = {};
         Object.entries(row).forEach(([k, v]) => {
-          if (keyMap[k]) out[keyMap[k]] = String(v).trim();
+          if (!keyMap[k]) return;
+          // Keep saldo in its raw type (number or string) so parseMinutes can convert correctly
+          out[keyMap[k]] = keyMap[k] === 'saldo' ? v : String(v).trim();
         });
         return out;
       })
@@ -686,7 +705,7 @@
     if (wb.SheetNames.length > 1) {
       showToast(`Planilha com múltiplas abas detectada. Usando a primeira aba: "${wb.SheetNames[0]}"`, 'info');
     }
-    return XLSX.utils.sheet_to_json(sheet, { defval: '', raw: false });
+    return XLSX.utils.sheet_to_json(sheet, { defval: '', raw: true });
   }
 
   // ===== Handle File =====
