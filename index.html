@@ -460,6 +460,124 @@
 
     /* ===== Calculadora HE ===== */
     #calc-panel { animation: fadeIn 0.18s ease; }
+
+    /* Sub-tabs dentro da calculadora */
+    .calc-subtabs {
+      display: flex; gap: 2px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 4px;
+      margin-bottom: 20px;
+      width: fit-content;
+    }
+    .calc-subtab {
+      padding: 7px 18px;
+      border: none; background: transparent;
+      border-radius: 6px;
+      font-size: 0.82rem; font-weight: 600;
+      color: var(--text-muted); cursor: pointer;
+      transition: all 0.15s;
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .calc-subtab:hover  { color: var(--text); background: rgba(0,0,0,0.04); }
+    .calc-subtab.active { background: var(--surface); color: var(--accent); box-shadow: var(--shadow); }
+
+    /* Barra de defaults do modo em lote */
+    .batch-defaults {
+      display: flex; align-items: flex-end; gap: 12px; flex-wrap: wrap;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 18px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow);
+    }
+    .batch-defaults .form-field { margin-bottom: 0; min-width: 140px; }
+    .batch-defaults .form-field input {
+      border: 1px solid var(--border); border-radius: 6px;
+      padding: 7px 10px; font-size: 0.875rem; width: 100%;
+      background: var(--bg); outline: none;
+      transition: border-color 0.15s;
+    }
+    .batch-defaults .form-field input:focus { border-color: var(--accent); background: #fff; }
+    .batch-defaults-divider { width: 1px; background: var(--border); align-self: stretch; margin: 0 4px; }
+
+    /* Gestor filter no lote */
+    .batch-header {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      gap: 16px; flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .batch-header .form-field { margin-bottom: 0; min-width: 260px; }
+    .batch-header .form-field select {
+      border: 1px solid var(--border); border-radius: 6px;
+      padding: 8px 32px 8px 10px; font-size: 0.875rem;
+      background: var(--bg); color: var(--text); outline: none;
+      appearance: none; width: 100%;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23718096' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 10px center;
+      cursor: pointer;
+    }
+    .batch-header .form-field select:focus { border-color: var(--accent); }
+
+    /* Tabela em lote */
+    #batch-table-wrapper {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow);
+    }
+    .batch-scroll { overflow-x: auto; }
+    #batch-table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+    #batch-table thead tr { background: var(--header-bg); }
+    #batch-table thead th {
+      color: #fff; font-weight: 600; font-size: 0.78rem;
+      text-transform: uppercase; letter-spacing: 0.05em;
+      padding: 11px 12px; text-align: left; white-space: nowrap;
+    }
+    #batch-table thead th:first-child { width: 40px; text-align: center; }
+    #batch-table tbody tr { border-bottom: 1px solid var(--border); }
+    #batch-table tbody tr:last-child { border-bottom: none; }
+    #batch-table tbody tr:hover { background: #FAFBFC; }
+    #batch-table tbody td { padding: 8px 12px; vertical-align: middle; }
+    #batch-table tbody td:first-child { text-align: center; color: var(--text-muted); font-size: 0.78rem; }
+
+    /* Inputs inline da tabela */
+    .batch-input {
+      border: 1px solid var(--border); border-radius: 5px;
+      padding: 5px 7px; font-size: 0.82rem;
+      background: var(--bg); color: var(--text);
+      outline: none; width: 100%;
+      transition: border-color 0.15s, background 0.15s;
+      -moz-appearance: textfield;
+    }
+    .batch-input::-webkit-inner-spin-button,
+    .batch-input::-webkit-outer-spin-button { -webkit-appearance: none; }
+    .batch-input:focus { border-color: var(--accent); background: #fff; }
+    .batch-input.input-error { border-color: var(--red-border); background: var(--red-bg); }
+    .col-salario { min-width: 110px; }
+    .col-regime  { min-width: 80px; }
+    .col-perc    { min-width: 70px; }
+    .col-valor   { min-width: 120px; white-space: nowrap; }
+
+    /* Célula de valor calculado */
+    .batch-valor { font-family: 'Courier New', monospace; font-weight: 700; font-size: 0.85rem; }
+    .batch-valor.ok   { color: var(--green); }
+    .batch-valor.pend { color: var(--text-muted); font-weight: 400; font-style: italic; font-family: inherit; font-size: 0.8rem; }
+    .batch-valor.zero { color: var(--text-muted); opacity: 0.5; }
+
+    /* tfoot totals */
+    #batch-table tfoot td {
+      background: #EEF4FF; border-top: 2px solid var(--border);
+      padding: 11px 12px; font-size: 0.82rem;
+    }
+    .batch-total-label { font-weight: 700; color: var(--blue); text-align: right; }
+    .batch-total-val   { font-family: 'Courier New', monospace; font-weight: 800; font-size: 1rem; color: var(--green); }
+
+    #batch-empty {
+      text-align: center; padding: 36px; color: var(--text-muted); font-size: 0.9rem;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); box-shadow: var(--shadow);
+    }
     @keyframes fadeIn { from { opacity:0; transform:translateY(4px) } to { opacity:1; transform:translateY(0) } }
 
     .calc-wrapper {
@@ -766,69 +884,144 @@
 
     <!-- ===== PAINEL: Calculadora de HE ===== -->
     <div id="calc-panel" hidden>
-      <div class="calc-wrapper">
 
-        <!-- Formulário -->
-        <div class="calc-card">
-          <h3>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg>
-            Calculadora de Horas Extras
-          </h3>
+      <!-- Sub-tabs -->
+      <div class="calc-subtabs">
+        <button class="calc-subtab active" data-subtab="individual" type="button">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+          Individual
+        </button>
+        <button class="calc-subtab" data-subtab="lote" type="button">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="3" cy="6" r="1"/><circle cx="3" cy="12" r="1"/><circle cx="3" cy="18" r="1"/></svg>
+          Por Gestor
+        </button>
+      </div>
 
-          <div class="form-field">
-            <label>Colaborador</label>
-            <select id="calc-colaborador">
-              <option value="">Selecione o colaborador...</option>
-            </select>
+      <!-- SUB-PAINEL: Individual -->
+      <div id="calc-individual">
+        <div class="calc-wrapper">
+
+          <!-- Formulário -->
+          <div class="calc-card">
+            <h3>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg>
+              Calculadora de Horas Extras
+            </h3>
+            <div class="form-field">
+              <label>Colaborador</label>
+              <select id="calc-colaborador"><option value="">Selecione o colaborador...</option></select>
+            </div>
+            <div class="form-field">
+              <label>Saldo de HE (da planilha)</label>
+              <div id="calc-saldo-display" class="saldo-chip zero">—</div>
+            </div>
+            <div class="form-field">
+              <label>Salário Contratual</label>
+              <div class="input-prefix"><span>R$</span>
+                <input type="number" id="calc-salario" min="0" step="0.01" placeholder="0,00">
+              </div>
+            </div>
+            <div class="form-field">
+              <label>Carga Horária Mensal</label>
+              <div class="toggle-row">
+                <button class="toggle-btn active" data-group="regime" data-val="220" type="button">220h</button>
+                <button class="toggle-btn"        data-group="regime" data-val="180" type="button">180h</button>
+                <button class="toggle-btn"        data-group="regime" data-val="160" type="button">160h</button>
+                <input  class="toggle-custom" id="calc-regime-custom" type="number" min="1" max="744" placeholder="Outro">
+              </div>
+            </div>
+            <div class="form-field">
+              <label>Adicional (%)</label>
+              <div class="toggle-row">
+                <button class="toggle-btn active" data-group="perc" data-val="50"  type="button">50%</button>
+                <button class="toggle-btn"        data-group="perc" data-val="100" type="button">100%</button>
+                <input  class="toggle-custom" id="calc-perc-custom" type="number" min="0" max="999" placeholder="Outro">
+              </div>
+            </div>
+            <button class="btn btn-primary" id="calc-btn" style="width:100%;justify-content:center;padding:11px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Calcular Valor Devido
+            </button>
           </div>
 
-          <div class="form-field">
-            <label>Saldo de HE (da planilha)</label>
-            <div id="calc-saldo-display" class="saldo-chip zero">—</div>
-          </div>
-
-          <div class="form-field">
-            <label>Salário Contratual</label>
-            <div class="input-prefix">
-              <span>R$</span>
-              <input type="number" id="calc-salario" min="0" step="0.01" placeholder="0,00">
+          <!-- Resultado -->
+          <div id="calc-result-area">
+            <div class="result-empty">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <p>Preencha os campos e clique em <strong>Calcular</strong> para ver o resultado.</p>
             </div>
           </div>
 
-          <div class="form-field">
-            <label>Carga Horária Mensal</label>
-            <div class="toggle-row">
-              <button class="toggle-btn active" data-group="regime" data-val="220" type="button">220h</button>
-              <button class="toggle-btn"        data-group="regime" data-val="180" type="button">180h</button>
-              <button class="toggle-btn"        data-group="regime" data-val="160" type="button">160h</button>
-              <input  class="toggle-custom" id="calc-regime-custom" type="number" min="1" max="744" placeholder="Outro">
-            </div>
-          </div>
+        </div>
+      </div><!-- /#calc-individual -->
 
-          <div class="form-field">
-            <label>Adicional (%)</label>
-            <div class="toggle-row">
-              <button class="toggle-btn active" data-group="perc" data-val="50"  type="button">50%</button>
-              <button class="toggle-btn"        data-group="perc" data-val="100" type="button">100%</button>
-              <input  class="toggle-custom" id="calc-perc-custom" type="number" min="0" max="999" placeholder="Outro">
-            </div>
-          </div>
+      <!-- SUB-PAINEL: Por Gestor -->
+      <div id="calc-lote" hidden>
 
-          <button class="btn btn-primary" id="calc-btn" style="width:100%;justify-content:center;padding:11px;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            Calcular Valor Devido
+        <!-- Filtro de gestor + ações -->
+        <div class="batch-header">
+          <div class="form-field">
+            <label>Filtrar por Gestor</label>
+            <select id="batch-gestor"><option value="">Todos os gestores</option></select>
+          </div>
+          <div style="display:flex;gap:8px;align-items:flex-end">
+            <button class="btn btn-export btn-sm" id="batch-export-btn">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Exportar CSV
+            </button>
+          </div>
+        </div>
+
+        <!-- Valores padrão -->
+        <div class="batch-defaults">
+          <div class="form-field">
+            <label>Salário padrão (R$)</label>
+            <input type="number" id="batch-sal-default" min="0" step="0.01" placeholder="ex: 5000,00">
+          </div>
+          <div class="form-field">
+            <label>Carga mensal padrão (h)</label>
+            <input type="number" id="batch-reg-default" min="1" max="744" value="220">
+          </div>
+          <div class="form-field">
+            <label>Adicional padrão (%)</label>
+            <input type="number" id="batch-perc-default" min="0" max="999" value="50">
+          </div>
+          <div class="batch-defaults-divider"></div>
+          <button class="btn btn-secondary btn-sm" id="batch-apply-btn" type="button">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+            Aplicar a todos
           </button>
         </div>
 
-        <!-- Resultado -->
-        <div id="calc-result-area">
-          <div class="result-empty">
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-            <p>Preencha os campos e clique em <strong>Calcular</strong> para ver o resultado.</p>
+        <!-- Tabela em lote -->
+        <div id="batch-table-wrapper">
+          <div class="batch-scroll">
+            <table id="batch-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Colaborador</th>
+                  <th>Saldo HE</th>
+                  <th class="col-salario">Salário (R$)</th>
+                  <th class="col-regime">Carga (h/mês)</th>
+                  <th class="col-perc">Adicional (%)</th>
+                  <th class="col-valor">Valor HE</th>
+                </tr>
+              </thead>
+              <tbody id="batch-body"></tbody>
+              <tfoot id="batch-foot" hidden>
+                <tr>
+                  <td colspan="6" class="batch-total-label">Total calculado</td>
+                  <td class="batch-total-val" id="batch-total-val">—</td>
+                </tr>
+              </tfoot>
+            </table>
           </div>
+          <p id="batch-empty" hidden>Selecione um gestor para listar os colaboradores.</p>
         </div>
 
-      </div>
+      </div><!-- /#calc-lote -->
+
     </div><!-- /#calc-panel -->
 
   </section>
@@ -879,6 +1072,8 @@
   // Calc refs
   const bancoPanel      = document.getElementById('banco-panel');
   const calcPanel       = document.getElementById('calc-panel');
+  const calcIndividual  = document.getElementById('calc-individual');
+  const calcLote        = document.getElementById('calc-lote');
   const calcColabEl     = document.getElementById('calc-colaborador');
   const calcSaldoDisp   = document.getElementById('calc-saldo-display');
   const calcSalarioEl   = document.getElementById('calc-salario');
@@ -886,6 +1081,17 @@
   const calcPercCustEl  = document.getElementById('calc-perc-custom');
   const calcBtn         = document.getElementById('calc-btn');
   const calcResultArea  = document.getElementById('calc-result-area');
+  // Lote refs
+  const batchGestorEl   = document.getElementById('batch-gestor');
+  const batchSalDef     = document.getElementById('batch-sal-default');
+  const batchRegDef     = document.getElementById('batch-reg-default');
+  const batchPercDef    = document.getElementById('batch-perc-default');
+  const batchApplyBtn   = document.getElementById('batch-apply-btn');
+  const batchExportBtn  = document.getElementById('batch-export-btn');
+  const batchBody       = document.getElementById('batch-body');
+  const batchFoot       = document.getElementById('batch-foot');
+  const batchTotalVal   = document.getElementById('batch-total-val');
+  const batchEmpty      = document.getElementById('batch-empty');
   const countTotal      = document.getElementById('count-total');
   const countRed        = document.getElementById('count-red');
   const countOrange     = document.getElementById('count-orange');
@@ -1082,6 +1288,7 @@
         updatePeriodTag();
         renderGestorDropdown();
         renderCalcDropdown();
+        renderBatchGestorDropdown();
         gestorFilter.value = '';
         statusChipsEl.querySelectorAll('.status-chip').forEach(b => b.classList.remove('active'));
         applyFilter();
@@ -1260,10 +1467,18 @@
       <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
       <p>Preencha os campos e clique em <strong>Calcular</strong> para ver o resultado.</p>
     </div>`;
-    // Volta para a aba Banco de Horas
+    // Limpa modo em lote
+    batchGestorEl.value = '';
+    batchBody.innerHTML = '';
+    batchFoot.hidden    = true;
+    batchEmpty.hidden   = false;
+    // Volta para a aba Banco de Horas e sub-tab Individual
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === 'banco'));
-    bancoPanel.hidden = false;
-    calcPanel.hidden  = true;
+    bancoPanel.hidden   = false;
+    calcPanel.hidden    = true;
+    calcIndividual.hidden = false;
+    calcLote.hidden       = true;
+    calcPanel.querySelectorAll('.calc-subtab').forEach(b => b.classList.toggle('active', b.dataset.subtab === 'individual'));
   }
 
   // ===== Events =====
@@ -1284,6 +1499,143 @@
   });
 
   changeFileBtn.addEventListener('click', resetToUpload);
+
+  // ===== Sub-tabs da calculadora =====
+  calcPanel.addEventListener('click', (e) => {
+    const btn = e.target.closest('.calc-subtab');
+    if (!btn) return;
+    calcPanel.querySelectorAll('.calc-subtab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const sub = btn.dataset.subtab;
+    calcIndividual.hidden = sub !== 'individual';
+    calcLote.hidden       = sub !== 'lote';
+  });
+
+  // ===== Lote: popular dropdown de gestores =====
+  function renderBatchGestorDropdown() {
+    while (batchGestorEl.options.length > 1) batchGestorEl.remove(1);
+    appState.gestors.forEach(g => {
+      const opt = document.createElement('option');
+      opt.value = g; opt.textContent = g;
+      batchGestorEl.appendChild(opt);
+    });
+  }
+
+  // ===== Lote: renderizar tabela =====
+  function renderBatchTable() {
+    const gestor = batchGestorEl.value;
+    const rows = appState.analysts
+      .filter(a => !gestor || a.gestor === gestor)
+      .sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'));
+
+    batchBody.innerHTML = '';
+
+    if (!rows.length) {
+      batchEmpty.hidden = false;
+      batchFoot.hidden  = true;
+      return;
+    }
+    batchEmpty.hidden = true;
+    batchFoot.hidden  = false;
+
+    const defSal  = batchSalDef.value  || '';
+    const defReg  = batchRegDef.value  || '220';
+    const defPerc = batchPercDef.value || '50';
+
+    const frag = document.createDocumentFragment();
+    rows.forEach((a, idx) => {
+      const tr = document.createElement('tr');
+      tr.dataset.minutes = a.minutes;
+      const saldoCls = a.minutes > 0 ? 'batch-valor ok'
+                     : a.minutes < 0 ? 'batch-valor zero'
+                     : 'batch-valor zero';
+      tr.innerHTML = `
+        <td>${idx + 1}</td>
+        <td class="td-nome">${escHtml(a.nome)}</td>
+        <td class="${a.minutes > 0 ? 'td-saldo row-green' : a.minutes < 0 ? 'td-saldo row-red' : 'td-saldo'}"
+            style="font-family:'Courier New',monospace;font-weight:700">${escHtml(a.saldoFmt)}</td>
+        <td class="col-salario"><input class="batch-input" type="number" data-field="salario" min="0" step="0.01" placeholder="0,00" value="${escHtml(defSal)}"></td>
+        <td class="col-regime" ><input class="batch-input" type="number" data-field="regime"  min="1" max="744"  placeholder="h/mês"  value="${escHtml(defReg)}"></td>
+        <td class="col-perc"   ><input class="batch-input" type="number" data-field="perc"    min="0" max="999"  placeholder="%"       value="${escHtml(defPerc)}"></td>
+        <td class="col-valor batch-valor pend">—</td>`;
+      frag.appendChild(tr);
+    });
+    batchBody.appendChild(frag);
+    recalcBatch();
+  }
+
+  // ===== Lote: recalcular linha e totais =====
+  function recalcRow(tr) {
+    const minutes = Number(tr.dataset.minutes);
+    const salario = parseFloat(tr.querySelector('[data-field="salario"]').value);
+    const regime  = parseFloat(tr.querySelector('[data-field="regime"]').value);
+    const perc    = parseFloat(tr.querySelector('[data-field="perc"]').value);
+    const cell    = tr.querySelector('.col-valor');
+
+    if (minutes <= 0) {
+      cell.textContent = '—'; cell.className = 'col-valor batch-valor zero'; return 0;
+    }
+    if (!salario || salario <= 0 || !regime || regime <= 0 || isNaN(perc)) {
+      cell.textContent = 'preencher'; cell.className = 'col-valor batch-valor pend'; return 0;
+    }
+    const valor = (salario / regime) * (1 + perc / 100) * (minutes / 60);
+    cell.textContent = BRL.format(valor);
+    cell.className = 'col-valor batch-valor ok';
+    return valor;
+  }
+
+  function recalcBatch() {
+    let total = 0;
+    batchBody.querySelectorAll('tr').forEach(tr => { total += recalcRow(tr); });
+    batchTotalVal.textContent = total > 0 ? BRL.format(total) : '—';
+  }
+
+  // ===== Lote: eventos =====
+  batchGestorEl.addEventListener('change', renderBatchTable);
+
+  batchBody.addEventListener('input', (e) => {
+    if (!e.target.classList.contains('batch-input')) return;
+    recalcBatch();
+  });
+
+  batchApplyBtn.addEventListener('click', () => {
+    const sal  = batchSalDef.value;
+    const reg  = batchRegDef.value;
+    const perc = batchPercDef.value;
+    batchBody.querySelectorAll('tr').forEach(tr => {
+      if (sal)  tr.querySelector('[data-field="salario"]').value = sal;
+      if (reg)  tr.querySelector('[data-field="regime"]').value  = reg;
+      if (perc) tr.querySelector('[data-field="perc"]').value    = perc;
+    });
+    recalcBatch();
+    showToast('Valores padrão aplicados a todos os colaboradores.', 'success', 2500);
+  });
+
+  // ===== Lote: exportar CSV =====
+  batchExportBtn.addEventListener('click', () => {
+    const rows = [...batchBody.querySelectorAll('tr')];
+    if (!rows.length) { showToast('Nenhum dado para exportar.', 'error'); return; }
+    const period  = periodInput.value.trim() || 'sem-periodo';
+    const gestor  = batchGestorEl.options[batchGestorEl.selectedIndex].text;
+    const header  = ['Colaborador', 'Saldo HE', 'Salário (R$)', 'Carga (h/mês)', 'Adicional (%)', 'Valor HE', 'Gestor', 'Período'].join(';');
+    const lines   = [header, ...rows.map(tr => {
+      const nome   = tr.querySelector('.td-nome').textContent;
+      const saldo  = tr.querySelector('[style*="Courier"]').textContent;
+      const sal    = tr.querySelector('[data-field="salario"]').value || '';
+      const reg    = tr.querySelector('[data-field="regime"]').value  || '';
+      const perc   = tr.querySelector('[data-field="perc"]').value    || '';
+      const valor  = tr.querySelector('.col-valor').textContent;
+      return [`"${nome}"`, `"${saldo}"`, `"${sal}"`, `"${reg}"`, `"${perc}"`, `"${valor}"`, `"${gestor}"`, `"${period}"`].join(';');
+    })];
+    const csv  = '\uFEFF' + lines.join('\r\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href = url; a.download = `he-por-gestor-${period.replace(/[\/\\]/g, '-')}.csv`;
+    document.body.appendChild(a); a.click();
+    document.body.removeChild(a); URL.revokeObjectURL(url);
+    showToast('Exportado com sucesso!', 'success');
+  });
 
   // ===== Tab switching =====
   document.getElementById('tab-bar').addEventListener('click', (e) => {
