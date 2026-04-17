@@ -405,6 +405,36 @@
     #toast.toast-info    { background: var(--accent); }
     #toast.hidden        { opacity: 0; pointer-events: none; transform: translateY(8px); }
 
+    /* ===== Status chips (multi-select) ===== */
+    .status-chips { display: flex; gap: 6px; flex-wrap: wrap; padding-top: 2px; }
+    .status-chip {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 6px 13px;
+      border-radius: 9999px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1.5px solid;
+      background: transparent;
+      transition: background 0.15s, transform 0.1s;
+      user-select: none;
+      line-height: 1;
+    }
+    .status-chip:active { transform: scale(0.96); }
+    .status-chip .chip-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+    .status-chip[data-status="red"]    { border-color: var(--red-border);    color: var(--red);    }
+    .status-chip[data-status="orange"] { border-color: var(--orange-border); color: var(--orange); }
+    .status-chip[data-status="green"]  { border-color: var(--green-border);  color: var(--green);  }
+
+    .status-chip[data-status="red"]    .chip-dot { background: var(--red);    }
+    .status-chip[data-status="orange"] .chip-dot { background: var(--orange); }
+    .status-chip[data-status="green"]  .chip-dot { background: var(--green);  }
+
+    .status-chip[data-status="red"].active    { background: var(--red-light);    }
+    .status-chip[data-status="orange"].active { background: var(--orange-light); }
+    .status-chip[data-status="green"].active  { background: var(--green-light);  }
+
     /* ===== Responsive ===== */
     @media (max-width: 900px) {
       #summary-cards { grid-template-columns: repeat(2, 1fr); }
@@ -513,13 +543,12 @@
         </select>
       </div>
       <div class="filter-group">
-        <label for="status-filter">Filtrar por Status</label>
-        <select id="status-filter">
-          <option value="">Todos os status</option>
-          <option value="red">Saldo Negativo</option>
-          <option value="orange">Alerta Limite</option>
-          <option value="green">Normal</option>
-        </select>
+        <label>Filtrar por Status</label>
+        <div class="status-chips" id="status-chips">
+          <button class="status-chip" data-status="red"    type="button"><span class="chip-dot"></span>Saldo Negativo</button>
+          <button class="status-chip" data-status="orange" type="button"><span class="chip-dot"></span>Alerta Limite</button>
+          <button class="status-chip" data-status="green"  type="button"><span class="chip-dot"></span>Normal</button>
+        </div>
       </div>
       <div class="filter-actions">
         <button class="btn btn-export btn-sm" id="export-btn">
@@ -601,7 +630,7 @@
   const periodTag       = document.getElementById('period-tag');
   const periodInput     = document.getElementById('period-input');
   const gestorFilter    = document.getElementById('gestor-filter');
-  const statusFilter    = document.getElementById('status-filter');
+  const statusChipsEl   = document.getElementById('status-chips');
   const exportBtn       = document.getElementById('export-btn');
   const tableBody       = document.getElementById('table-body');
   const noResults       = document.getElementById('no-results');
@@ -806,7 +835,7 @@
         updatePeriodTag();
         renderGestorDropdown();
         gestorFilter.value = '';
-        statusFilter.value = '';
+        statusChipsEl.querySelectorAll('.status-chip').forEach(b => b.classList.remove('active'));
         applyFilter();
         renderAll();
 
@@ -849,12 +878,18 @@
   }
 
   // ===== Apply Filter =====
+  function activeStatuses() {
+    return new Set(
+      [...statusChipsEl.querySelectorAll('.status-chip.active')].map(b => b.dataset.status)
+    );
+  }
+
   function applyFilter() {
-    const selectedGestor = gestorFilter.value;
-    const selectedStatus = statusFilter.value;
+    const selectedGestor  = gestorFilter.value;
+    const selectedStatuses = activeStatuses();
     appState.filtered = appState.analysts.filter(a => {
       const matchGestor = !selectedGestor || a.gestor === selectedGestor;
-      const matchStatus = !selectedStatus || a.alert === selectedStatus;
+      const matchStatus = selectedStatuses.size === 0 || selectedStatuses.has(a.alert);
       return matchGestor && matchStatus;
     });
   }
@@ -991,7 +1026,10 @@
     applyFilter();
     renderTable();
   });
-  statusFilter.addEventListener('change', () => {
+  statusChipsEl.addEventListener('click', (e) => {
+    const chip = e.target.closest('.status-chip');
+    if (!chip) return;
+    chip.classList.toggle('active');
     applyFilter();
     renderTable();
   });
