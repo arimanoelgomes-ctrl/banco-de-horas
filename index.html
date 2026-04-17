@@ -435,6 +435,158 @@
     .status-chip[data-status="orange"].active { background: var(--orange-light); }
     .status-chip[data-status="green"].active  { background: var(--green-light);  }
 
+    /* ===== Tab bar ===== */
+    #tab-bar {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 20px;
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 0;
+    }
+    .tab-btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 10px 20px;
+      font-size: 0.875rem; font-weight: 600;
+      cursor: pointer;
+      border: none; background: transparent;
+      color: var(--text-muted);
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      border-radius: 6px 6px 0 0;
+      transition: color 0.15s, border-color 0.15s, background 0.15s;
+    }
+    .tab-btn:hover { color: var(--text); background: rgba(0,0,0,0.03); }
+    .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); background: transparent; }
+
+    /* ===== Calculadora HE ===== */
+    #calc-panel { animation: fadeIn 0.18s ease; }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(4px) } to { opacity:1; transform:translateY(0) } }
+
+    .calc-wrapper {
+      display: grid;
+      grid-template-columns: 420px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+    .calc-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow);
+    }
+    .calc-card h3 {
+      font-size: 1rem; font-weight: 700; color: var(--text);
+      margin-bottom: 22px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .form-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 18px; }
+    .form-field label { font-size: 0.8rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; }
+    .form-field input[type="text"],
+    .form-field input[type="number"],
+    .form-field select {
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 9px 12px;
+      font-size: 0.9rem;
+      color: var(--text);
+      background: var(--bg);
+      outline: none;
+      transition: border-color 0.15s;
+      width: 100%;
+    }
+    .form-field input:focus,
+    .form-field select:focus { border-color: var(--accent); background: #fff; }
+    .form-field input[readonly] { background: #F7FAFC; color: var(--text-muted); cursor: default; }
+    .form-field .input-prefix {
+      position: relative;
+    }
+    .form-field .input-prefix span {
+      position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+      font-size: 0.85rem; font-weight: 600; color: var(--text-muted); pointer-events: none;
+    }
+    .form-field .input-prefix input { padding-left: 28px; }
+
+    /* Toggle groups (regime / percentual) */
+    .toggle-row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+    .toggle-btn {
+      padding: 7px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 7px;
+      font-size: 0.82rem; font-weight: 700;
+      cursor: pointer; background: transparent; color: var(--text-muted);
+      transition: all 0.15s;
+    }
+    .toggle-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .toggle-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .toggle-custom {
+      border: 1.5px solid var(--border);
+      border-radius: 7px;
+      padding: 7px 10px;
+      font-size: 0.82rem;
+      width: 80px; text-align: center;
+      outline: none; background: var(--bg); color: var(--text);
+      transition: border-color 0.15s;
+    }
+    .toggle-custom:focus { border-color: var(--accent); background: #fff; }
+    .toggle-custom::placeholder { color: var(--text-muted); }
+
+    /* Saldo chip inside form */
+    .saldo-chip {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 14px;
+      border-radius: 7px;
+      font-family: 'Courier New', monospace; font-weight: 700; font-size: 1rem;
+      border: 1.5px solid var(--border);
+      background: #F7FAFC;
+    }
+    .saldo-chip.pos { color: var(--green); border-color: var(--green-border); background: var(--green-bg); }
+    .saldo-chip.neg { color: var(--red);   border-color: var(--red-border);   background: var(--red-bg);   }
+    .saldo-chip.zero { color: var(--text-muted); }
+
+    /* Result card */
+    .result-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+    .result-header { background: var(--header-bg); color: #fff; padding: 16px 20px; }
+    .result-header h4 { font-size: 0.9rem; font-weight: 700; opacity: 0.9; margin-bottom: 2px; }
+    .result-collab { font-size: 1rem; font-weight: 700; }
+    .result-body { padding: 20px; }
+    .result-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.875rem;
+    }
+    .result-row:last-child { border-bottom: none; }
+    .result-row .rlabel { color: var(--text-muted); font-weight: 500; }
+    .result-row .rvalue { font-weight: 700; font-family: 'Courier New', monospace; font-size: 0.9rem; }
+    .result-total {
+      margin-top: 16px;
+      background: var(--green-bg);
+      border: 2px solid var(--green-border);
+      border-radius: 8px;
+      padding: 16px 20px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .result-total .rlabel { font-size: 0.85rem; font-weight: 700; color: var(--green); text-transform: uppercase; letter-spacing: 0.05em; }
+    .result-total .rvalue { font-size: 1.4rem; font-weight: 800; color: var(--green); }
+    .result-empty {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 48px 24px; text-align: center; color: var(--text-muted);
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      gap: 12px;
+    }
+    .result-empty svg { opacity: 0.3; }
+    .result-empty p { font-size: 0.9rem; }
+    .result-warn {
+      background: var(--orange-bg); border: 1.5px solid var(--orange-border);
+      border-radius: 8px; padding: 14px 18px;
+      font-size: 0.875rem; font-weight: 600; color: var(--orange);
+      display: flex; align-items: center; gap: 8px;
+    }
+
     /* ===== Responsive ===== */
     @media (max-width: 900px) {
       #summary-cards { grid-template-columns: repeat(2, 1fr); }
@@ -445,6 +597,7 @@
       .period-group input { width: 100%; }
       #summary-cards { grid-template-columns: repeat(2, 1fr); gap: 10px; }
       .card-value { font-size: 1.6rem; }
+      .calc-wrapper { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -509,6 +662,21 @@
         Trocar Arquivo
       </button>
     </div>
+
+    <!-- Tab bar -->
+    <div id="tab-bar">
+      <button class="tab-btn active" data-tab="banco" type="button">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        Banco de Horas
+      </button>
+      <button class="tab-btn" data-tab="calc" type="button">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg>
+        Calculadora de HE
+      </button>
+    </div>
+
+    <!-- ===== PAINEL: Banco de Horas ===== -->
+    <div id="banco-panel">
 
     <!-- Summary Cards -->
     <div id="summary-cards">
@@ -594,6 +762,75 @@
       </div>
     </div>
 
+    </div><!-- /#banco-panel -->
+
+    <!-- ===== PAINEL: Calculadora de HE ===== -->
+    <div id="calc-panel" hidden>
+      <div class="calc-wrapper">
+
+        <!-- Formulário -->
+        <div class="calc-card">
+          <h3>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg>
+            Calculadora de Horas Extras
+          </h3>
+
+          <div class="form-field">
+            <label>Colaborador</label>
+            <select id="calc-colaborador">
+              <option value="">Selecione o colaborador...</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label>Saldo de HE (da planilha)</label>
+            <div id="calc-saldo-display" class="saldo-chip zero">—</div>
+          </div>
+
+          <div class="form-field">
+            <label>Salário Contratual</label>
+            <div class="input-prefix">
+              <span>R$</span>
+              <input type="number" id="calc-salario" min="0" step="0.01" placeholder="0,00">
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label>Carga Horária Mensal</label>
+            <div class="toggle-row">
+              <button class="toggle-btn active" data-group="regime" data-val="220" type="button">220h</button>
+              <button class="toggle-btn"        data-group="regime" data-val="180" type="button">180h</button>
+              <button class="toggle-btn"        data-group="regime" data-val="160" type="button">160h</button>
+              <input  class="toggle-custom" id="calc-regime-custom" type="number" min="1" max="744" placeholder="Outro">
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label>Adicional (%)</label>
+            <div class="toggle-row">
+              <button class="toggle-btn active" data-group="perc" data-val="50"  type="button">50%</button>
+              <button class="toggle-btn"        data-group="perc" data-val="100" type="button">100%</button>
+              <input  class="toggle-custom" id="calc-perc-custom" type="number" min="0" max="999" placeholder="Outro">
+            </div>
+          </div>
+
+          <button class="btn btn-primary" id="calc-btn" style="width:100%;justify-content:center;padding:11px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Calcular Valor Devido
+          </button>
+        </div>
+
+        <!-- Resultado -->
+        <div id="calc-result-area">
+          <div class="result-empty">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <p>Preencha os campos e clique em <strong>Calcular</strong> para ver o resultado.</p>
+          </div>
+        </div>
+
+      </div>
+    </div><!-- /#calc-panel -->
+
   </section>
 
 </main>
@@ -639,6 +876,16 @@
   const totalsCount     = document.getElementById('totals-count');
   const totalsPos       = document.getElementById('totals-pos');
   const totalsNeg       = document.getElementById('totals-neg');
+  // Calc refs
+  const bancoPanel      = document.getElementById('banco-panel');
+  const calcPanel       = document.getElementById('calc-panel');
+  const calcColabEl     = document.getElementById('calc-colaborador');
+  const calcSaldoDisp   = document.getElementById('calc-saldo-display');
+  const calcSalarioEl   = document.getElementById('calc-salario');
+  const calcRegCustEl   = document.getElementById('calc-regime-custom');
+  const calcPercCustEl  = document.getElementById('calc-perc-custom');
+  const calcBtn         = document.getElementById('calc-btn');
+  const calcResultArea  = document.getElementById('calc-result-area');
   const countTotal      = document.getElementById('count-total');
   const countRed        = document.getElementById('count-red');
   const countOrange     = document.getElementById('count-orange');
@@ -834,6 +1081,7 @@
         loadedFileName.textContent = file.name;
         updatePeriodTag();
         renderGestorDropdown();
+        renderCalcDropdown();
         gestorFilter.value = '';
         statusChipsEl.querySelectorAll('.status-chip').forEach(b => b.classList.remove('active'));
         applyFilter();
@@ -1001,6 +1249,21 @@
     fileInput.value   = '';
     uploadSection.hidden = false;
     dashSection.hidden   = true;
+    // Reset calculadora
+    calcColabEl.value       = '';
+    calcSaldoDisp.textContent = '—';
+    calcSaldoDisp.className = 'saldo-chip zero';
+    calcSalarioEl.value     = '';
+    calcRegCustEl.value     = '';
+    calcPercCustEl.value    = '';
+    calcResultArea.innerHTML = `<div class="result-empty">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <p>Preencha os campos e clique em <strong>Calcular</strong> para ver o resultado.</p>
+    </div>`;
+    // Volta para a aba Banco de Horas
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === 'banco'));
+    bancoPanel.hidden = false;
+    calcPanel.hidden  = true;
   }
 
   // ===== Events =====
@@ -1021,6 +1284,159 @@
   });
 
   changeFileBtn.addEventListener('click', resetToUpload);
+
+  // ===== Tab switching =====
+  document.getElementById('tab-bar').addEventListener('click', (e) => {
+    const btn = e.target.closest('.tab-btn');
+    if (!btn) return;
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const tab = btn.dataset.tab;
+    bancoPanel.hidden = tab !== 'banco';
+    calcPanel.hidden  = tab !== 'calc';
+  });
+
+  // ===== Toggle buttons (regime / perc) =====
+  document.getElementById('calc-panel').addEventListener('click', (e) => {
+    const btn = e.target.closest('.toggle-btn');
+    if (!btn) return;
+    const group = btn.dataset.group;
+    document.querySelectorAll(`.toggle-btn[data-group="${group}"]`)
+      .forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    // Clear custom input when a preset is chosen
+    if (group === 'regime') calcRegCustEl.value = '';
+    if (group === 'perc')   calcPercCustEl.value = '';
+  });
+
+  // Typing in custom input deactivates preset buttons
+  calcRegCustEl.addEventListener('input', () => {
+    if (calcRegCustEl.value)
+      document.querySelectorAll('.toggle-btn[data-group="regime"]').forEach(b => b.classList.remove('active'));
+  });
+  calcPercCustEl.addEventListener('input', () => {
+    if (calcPercCustEl.value)
+      document.querySelectorAll('.toggle-btn[data-group="perc"]').forEach(b => b.classList.remove('active'));
+  });
+
+  // ===== Populate calc collaborator dropdown =====
+  function renderCalcDropdown() {
+    while (calcColabEl.options.length > 1) calcColabEl.remove(1);
+    appState.analysts
+      .slice()
+      .sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'))
+      .forEach(a => {
+        const opt = document.createElement('option');
+        opt.value = a.nome;
+        opt.textContent = a.nome;
+        opt.dataset.minutes = a.minutes;
+        opt.dataset.saldoFmt = a.saldoFmt;
+        calcColabEl.appendChild(opt);
+      });
+  }
+
+  // ===== Auto-fill saldo on collaborator selection =====
+  calcColabEl.addEventListener('change', () => {
+    const opt = calcColabEl.selectedOptions[0];
+    if (!opt || !opt.value) {
+      calcSaldoDisp.textContent = '—';
+      calcSaldoDisp.className = 'saldo-chip zero';
+      return;
+    }
+    const min = Number(opt.dataset.minutes);
+    const fmt = opt.dataset.saldoFmt;
+    calcSaldoDisp.textContent = fmt;
+    calcSaldoDisp.className = 'saldo-chip ' + (min > 0 ? 'pos' : min < 0 ? 'neg' : 'zero');
+  });
+
+  // ===== Calculadora: obter valor dos toggles =====
+  function getToggleVal(group, customEl) {
+    const active = document.querySelector(`.toggle-btn.active[data-group="${group}"]`);
+    if (active) return Number(active.dataset.val);
+    const c = parseFloat(customEl.value);
+    return isNaN(c) ? null : c;
+  }
+
+  // ===== Calculadora: formatar moeda BRL =====
+  const BRL = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+
+  // ===== Calcular =====
+  calcBtn.addEventListener('click', () => {
+    const opt = calcColabEl.selectedOptions[0];
+    if (!opt || !opt.value) { showToast('Selecione o colaborador.', 'error'); return; }
+
+    const minutos  = Number(opt.dataset.minutes);
+    const salario  = parseFloat(calcSalarioEl.value);
+    const regime   = getToggleVal('regime', calcRegCustEl);
+    const perc     = getToggleVal('perc',   calcPercCustEl);
+
+    if (!salario || salario <= 0)  { showToast('Informe o salário contratual.', 'error'); return; }
+    if (!regime  || regime  <= 0)  { showToast('Informe a carga horária mensal.', 'error'); return; }
+    if (perc === null || perc < 0) { showToast('Informe o percentual adicional.', 'error'); return; }
+
+    const nome        = opt.value;
+    const horasExtras = minutos / 60;                          // horas decimais
+    const valorHoraNormal = salario / regime;                  // R$ por hora
+    const valorHoraExtra  = valorHoraNormal * (1 + perc / 100);
+    const valorTotal      = valorHoraExtra * horasExtras;
+
+    // Monta o HTML do resultado
+    if (minutos <= 0) {
+      calcResultArea.innerHTML = `
+        <div class="result-card">
+          <div class="result-header">
+            <h4>Resultado</h4>
+            <div class="result-collab">${escHtml(nome)}</div>
+          </div>
+          <div class="result-body">
+            <div class="result-warn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              Este colaborador não possui saldo positivo de horas extras.
+              Saldo atual: <strong>${escHtml(opt.dataset.saldoFmt)}</strong>
+            </div>
+          </div>
+        </div>`;
+      return;
+    }
+
+    calcResultArea.innerHTML = `
+      <div class="result-card">
+        <div class="result-header">
+          <h4>Resultado do Cálculo</h4>
+          <div class="result-collab">${escHtml(nome)}</div>
+        </div>
+        <div class="result-body">
+          <div class="result-row">
+            <span class="rlabel">Saldo de horas extras</span>
+            <span class="rvalue">${escHtml(opt.dataset.saldoFmt)}</span>
+          </div>
+          <div class="result-row">
+            <span class="rlabel">Salário contratual</span>
+            <span class="rvalue">${BRL.format(salario)}</span>
+          </div>
+          <div class="result-row">
+            <span class="rlabel">Carga horária mensal</span>
+            <span class="rvalue">${regime}h</span>
+          </div>
+          <div class="result-row">
+            <span class="rlabel">Valor da hora normal</span>
+            <span class="rvalue">${BRL.format(valorHoraNormal)}</span>
+          </div>
+          <div class="result-row">
+            <span class="rlabel">Adicional aplicado</span>
+            <span class="rvalue">${perc}%</span>
+          </div>
+          <div class="result-row">
+            <span class="rlabel">Valor da hora extra</span>
+            <span class="rvalue">${BRL.format(valorHoraExtra)}</span>
+          </div>
+          <div class="result-total">
+            <span class="rlabel">💰 Valor total devido</span>
+            <span class="rvalue">${BRL.format(valorTotal)}</span>
+          </div>
+        </div>
+      </div>`;
+  });
 
   gestorFilter.addEventListener('change', () => {
     applyFilter();
