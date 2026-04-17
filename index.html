@@ -578,6 +578,80 @@
       background: var(--surface); border: 1px solid var(--border);
       border-radius: var(--radius); box-shadow: var(--shadow);
     }
+
+    /* ===== Card de Totalizador Geral ===== */
+    #batch-summary {
+      margin-top: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .summary-header {
+      background: var(--header-bg);
+      color: #fff;
+      padding: 12px 20px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .summary-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0;
+    }
+    .summary-item {
+      padding: 20px 24px;
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .summary-item:last-child { border-right: none; }
+    .summary-item .s-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+    .summary-item .s-value {
+      font-size: 1.6rem;
+      font-weight: 800;
+      line-height: 1.1;
+    }
+    .summary-item .s-sub {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+    .summary-item.s-colabs .s-value { color: var(--blue); }
+    .summary-item.s-horas  .s-value { color: var(--orange); font-family: 'Courier New', monospace; }
+    .summary-item.s-total  {
+      background: var(--green-bg);
+    }
+    .summary-item.s-total .s-label { color: var(--green); }
+    .summary-item.s-total .s-value { color: var(--green); font-family: 'Courier New', monospace; }
+    .summary-pending {
+      padding: 14px 20px;
+      background: var(--orange-bg);
+      border-top: 1px solid var(--orange-border);
+      font-size: 0.8rem;
+      color: var(--orange);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    @media (max-width: 600px) {
+      .summary-body { grid-template-columns: 1fr; }
+      .summary-item { border-right: none; border-bottom: 1px solid var(--border); }
+      .summary-item:last-child { border-bottom: none; }
+    }
     @keyframes fadeIn { from { opacity:0; transform:translateY(4px) } to { opacity:1; transform:translateY(0) } }
 
     .calc-wrapper {
@@ -1020,6 +1094,35 @@
           <p id="batch-empty" hidden>Selecione um gestor para listar os colaboradores.</p>
         </div>
 
+        <!-- Totalizador Geral -->
+        <div id="batch-summary" hidden>
+          <div class="summary-header">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            Totalizador — Custo com Horas Extras
+          </div>
+          <div class="summary-body">
+            <div class="summary-item s-colabs">
+              <span class="s-label">Colaboradores com HE</span>
+              <span class="s-value" id="sum-colabs">0</span>
+              <span class="s-sub" id="sum-colabs-sub">de 0 listados</span>
+            </div>
+            <div class="summary-item s-horas">
+              <span class="s-label">Total de Horas Extras</span>
+              <span class="s-value" id="sum-horas">00:00</span>
+              <span class="s-sub">horas acumuladas</span>
+            </div>
+            <div class="summary-item s-total">
+              <span class="s-label">💰 Total a Pagar em HE</span>
+              <span class="s-value" id="sum-total">R$ 0,00</span>
+              <span class="s-sub" id="sum-total-sub">valor total calculado</span>
+            </div>
+          </div>
+          <div class="summary-pending" id="sum-pending" hidden>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <span id="sum-pending-msg"></span>
+          </div>
+        </div>
+
       </div><!-- /#calc-lote -->
 
     </div><!-- /#calc-panel -->
@@ -1092,6 +1195,14 @@
   const batchFoot       = document.getElementById('batch-foot');
   const batchTotalVal   = document.getElementById('batch-total-val');
   const batchEmpty      = document.getElementById('batch-empty');
+  const batchSummary    = document.getElementById('batch-summary');
+  const sumColabs       = document.getElementById('sum-colabs');
+  const sumColabsSub    = document.getElementById('sum-colabs-sub');
+  const sumHoras        = document.getElementById('sum-horas');
+  const sumTotal        = document.getElementById('sum-total');
+  const sumTotalSub     = document.getElementById('sum-total-sub');
+  const sumPending      = document.getElementById('sum-pending');
+  const sumPendingMsg   = document.getElementById('sum-pending-msg');
   const countTotal      = document.getElementById('count-total');
   const countRed        = document.getElementById('count-red');
   const countOrange     = document.getElementById('count-orange');
@@ -1468,10 +1579,11 @@
       <p>Preencha os campos e clique em <strong>Calcular</strong> para ver o resultado.</p>
     </div>`;
     // Limpa modo em lote
-    batchGestorEl.value = '';
-    batchBody.innerHTML = '';
-    batchFoot.hidden    = true;
-    batchEmpty.hidden   = false;
+    batchGestorEl.value   = '';
+    batchBody.innerHTML   = '';
+    batchFoot.hidden      = true;
+    batchSummary.hidden   = true;
+    batchEmpty.hidden     = false;
     // Volta para a aba Banco de Horas e sub-tab Individual
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === 'banco'));
     bancoPanel.hidden   = false;
@@ -1585,9 +1697,50 @@
   }
 
   function recalcBatch() {
-    let total = 0;
-    batchBody.querySelectorAll('tr').forEach(tr => { total += recalcRow(tr); });
-    batchTotalVal.textContent = total > 0 ? BRL.format(total) : '—';
+    const trs = [...batchBody.querySelectorAll('tr')];
+    if (!trs.length) { batchSummary.hidden = true; return; }
+
+    let totalValor    = 0;
+    let totalMinPos   = 0;  // soma dos minutos positivos (horas extras acumuladas)
+    let countCalc     = 0;  // colaboradores com HE e campos preenchidos
+    let countPending  = 0;  // colaboradores com HE mas sem salário preenchido
+
+    trs.forEach(tr => {
+      const minutes = Number(tr.dataset.minutes);
+      const salario = parseFloat(tr.querySelector('[data-field="salario"]').value);
+
+      if (minutes > 0) totalMinPos += minutes;
+
+      const val = recalcRow(tr);
+      if (val > 0) {
+        totalValor += val;
+        countCalc++;
+      } else if (minutes > 0 && (!salario || salario <= 0)) {
+        countPending++;
+      }
+    });
+
+    // Atualiza tfoot
+    batchTotalVal.textContent = totalValor > 0 ? BRL.format(totalValor) : '—';
+
+    // Atualiza card de resumo
+    batchSummary.hidden = false;
+    const totalListed   = trs.length;
+    sumColabs.textContent    = countCalc;
+    sumColabsSub.textContent = `de ${totalListed} listado${totalListed !== 1 ? 's' : ''}`;
+    sumHoras.textContent     = formatMinutes(totalMinPos);
+    sumTotal.textContent     = totalValor > 0 ? BRL.format(totalValor) : 'R$ 0,00';
+    sumTotalSub.textContent  = countCalc > 0
+      ? `${countCalc} colaborador${countCalc !== 1 ? 'es' : ''} calculado${countCalc !== 1 ? 's' : ''}`
+      : 'preencha os salários para calcular';
+
+    // Alerta de pendências
+    if (countPending > 0) {
+      sumPending.hidden    = false;
+      sumPendingMsg.textContent = `${countPending} colaborador${countPending !== 1 ? 'es' : ''} com saldo positivo ainda sem salário informado — o total pode estar incompleto.`;
+    } else {
+      sumPending.hidden = true;
+    }
   }
 
   // ===== Lote: eventos =====
