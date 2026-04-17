@@ -1038,6 +1038,14 @@
             <label>Filtrar por Gestor</label>
             <select id="batch-gestor"><option value="">Todos os gestores</option></select>
           </div>
+          <div class="filter-group">
+            <label>Filtrar por Status</label>
+            <div class="status-chips" id="batch-status-chips">
+              <button class="status-chip" data-status="red"    type="button"><span class="chip-dot"></span>Saldo Negativo</button>
+              <button class="status-chip" data-status="orange" type="button"><span class="chip-dot"></span>Alerta Limite</button>
+              <button class="status-chip" data-status="green"  type="button"><span class="chip-dot"></span>Normal</button>
+            </div>
+          </div>
           <div style="display:flex;gap:8px;align-items:flex-end">
             <button class="btn btn-export btn-sm" id="batch-export-btn">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
@@ -1185,7 +1193,8 @@
   const calcBtn         = document.getElementById('calc-btn');
   const calcResultArea  = document.getElementById('calc-result-area');
   // Lote refs
-  const batchGestorEl   = document.getElementById('batch-gestor');
+  const batchGestorEl      = document.getElementById('batch-gestor');
+  const batchStatusChipsEl = document.getElementById('batch-status-chips');
   const batchSalDef     = document.getElementById('batch-sal-default');
   const batchRegDef     = document.getElementById('batch-reg-default');
   const batchPercDef    = document.getElementById('batch-perc-default');
@@ -1580,6 +1589,7 @@
     </div>`;
     // Limpa modo em lote
     batchGestorEl.value   = '';
+    batchStatusChipsEl.querySelectorAll('.status-chip').forEach(b => b.classList.remove('active'));
     batchBody.innerHTML   = '';
     batchFoot.hidden      = true;
     batchSummary.hidden   = true;
@@ -1636,8 +1646,11 @@
   // ===== Lote: renderizar tabela =====
   function renderBatchTable() {
     const gestor = batchGestorEl.value;
+    const activeStatuses = new Set(
+      [...batchStatusChipsEl.querySelectorAll('.status-chip.active')].map(b => b.dataset.status)
+    );
     const rows = appState.analysts
-      .filter(a => !gestor || a.gestor === gestor)
+      .filter(a => (!gestor || a.gestor === gestor) && (activeStatuses.size === 0 || activeStatuses.has(a.alert)))
       .sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'));
 
     batchBody.innerHTML = '';
@@ -1745,6 +1758,13 @@
 
   // ===== Lote: eventos =====
   batchGestorEl.addEventListener('change', renderBatchTable);
+
+  batchStatusChipsEl.addEventListener('click', (e) => {
+    const chip = e.target.closest('.status-chip');
+    if (!chip) return;
+    chip.classList.toggle('active');
+    renderBatchTable();
+  });
 
   batchBody.addEventListener('input', (e) => {
     if (!e.target.classList.contains('batch-input')) return;
