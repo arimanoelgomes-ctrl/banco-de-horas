@@ -337,6 +337,38 @@
       display: flex;
       justify-content: flex-end;
     }
+
+    /* ===== Totals row (tfoot) ===== */
+    #data-table tfoot .totals-row td {
+      background: #EEF4FF;
+      border-top: 2px solid var(--border);
+      padding: 11px 16px;
+      font-size: 0.82rem;
+    }
+    .totals-label {
+      font-weight: 700;
+      color: var(--blue);
+      font-size: 0.82rem;
+    }
+    .totals-label span { font-weight: 400; color: var(--text-muted); margin-left: 6px; }
+    .totals-pos, .totals-neg {
+      font-family: 'Courier New', monospace;
+      font-weight: 700;
+      font-size: 0.9rem;
+      white-space: nowrap;
+    }
+    .totals-pos { color: var(--green); }
+    .totals-neg { color: var(--red); }
+    .totals-tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      font-family: inherit;
+      opacity: 0.7;
+      margin-right: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
     #no-results {
       text-align: center;
       padding: 40px;
@@ -515,6 +547,16 @@
             </tr>
           </thead>
           <tbody id="table-body"></tbody>
+          <tfoot id="table-foot" hidden>
+            <tr class="totals-row">
+              <td></td>
+              <td colspan="2" class="totals-label">
+                Totalizador <span id="totals-count"></span>
+              </td>
+              <td class="totals-pos" id="totals-pos"></td>
+              <td class="totals-neg" id="totals-neg"></td>
+            </tr>
+          </tfoot>
         </table>
       </div>
       <p id="no-results" hidden>Nenhum analista encontrado para este filtro.</p>
@@ -564,6 +606,10 @@
   const tableBody       = document.getElementById('table-body');
   const noResults       = document.getElementById('no-results');
   const tableCountEl    = document.getElementById('table-count');
+  const tableFoot       = document.getElementById('table-foot');
+  const totalsCount     = document.getElementById('totals-count');
+  const totalsPos       = document.getElementById('totals-pos');
+  const totalsNeg       = document.getElementById('totals-neg');
   const countTotal      = document.getElementById('count-total');
   const countRed        = document.getElementById('count-red');
   const countOrange     = document.getElementById('count-orange');
@@ -832,11 +878,13 @@
     const rows = appState.filtered;
 
     if (!rows.length) {
-      noResults.hidden   = false;
+      noResults.hidden     = false;
+      tableFoot.hidden     = true;
       tableCountEl.textContent = '';
       return;
     }
     noResults.hidden = true;
+    tableFoot.hidden = false;
 
     const frag = document.createDocumentFragment();
     rows.forEach((a, idx) => {
@@ -852,6 +900,18 @@
       frag.appendChild(tr);
     });
     tableBody.appendChild(frag);
+
+    // ── Totalizador ──
+    const posMin = rows.reduce((s, a) => a.minutes > 0 ? s + a.minutes : s, 0);
+    const negMin = rows.reduce((s, a) => a.minutes < 0 ? s + a.minutes : s, 0);
+    const posCount = rows.filter(a => a.minutes > 0).length;
+    const negCount = rows.filter(a => a.minutes < 0).length;
+
+    totalsCount.textContent = `(${rows.length} analista${rows.length !== 1 ? 's' : ''})`;
+    totalsPos.innerHTML = `<span class="totals-tag">Positivo</span>${formatMinutes(posMin)} <span style="font-weight:400;font-size:0.75rem;opacity:0.65">(${posCount})</span>`;
+    totalsNeg.innerHTML = negMin < 0
+      ? `<span class="totals-tag">Negativo</span>${formatMinutes(negMin)} <span style="font-weight:400;font-size:0.75rem;opacity:0.65">(${negCount})</span>`
+      : `<span class="totals-tag">Negativo</span><span style="font-weight:400;opacity:0.5">—</span>`;
 
     const total = appState.analysts.length;
     tableCountEl.textContent = rows.length === total
